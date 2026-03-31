@@ -1,18 +1,595 @@
----
-layout: default
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luca Vegro — Finance & Risk Professional</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Design tokens ── */
+    :root {
+      --orange:      #F97316;
+      --orange-light:#FFF0E6;
+      --orange-dark: #C2510E;
+      --blue:        #38BDF8;
+      --blue-light:  #E0F5FE;
+      --blue-dark:   #0369A1;
+      --bg:          #FAFAFA;
+      --surface:     #FFFFFF;
+      --border:      #E5E7EB;
+      --text:        #111827;
+      --text-muted:  #6B7280;
+      --text-light:  #9CA3AF;
+      --radius:      12px;
+      --shadow-sm:   0 1px 3px rgba(0,0,0,.07);
+      --shadow-md:   0 4px 16px rgba(0,0,0,.09);
+    }
 
-<div class="posts">
-  {% for post in site.posts %}
-    <article class="post">
+    /* ── Reset / base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    a { color: inherit; text-decoration: none; }
 
-      <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+    /* ── Layout helpers ── */
+    .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 64px 0; }
+    .section + .section { border-top: 1px solid var(--border); }
 
-      <div class="entry">
-        {{ post.excerpt }}
+    /* ── Nav ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,250,250,.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .inner {
+      max-width: 860px; margin: 0 auto; padding: 0 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo {
+      font-family: 'Sora', sans-serif;
+      font-size: 18px; font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--orange); }
+    .nav-links { display: flex; gap: 28px; }
+    .nav-links a {
+      font-size: 13px; font-weight: 500;
+      color: var(--text-muted);
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--orange); }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 80px 0 72px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 40px;
+      align-items: start;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--blue-light); color: var(--blue-dark);
+      font-size: 12px; font-weight: 600; letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 4px 12px; border-radius: 999px;
+      margin-bottom: 20px;
+    }
+    .hero-eyebrow::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--blue); border-radius: 50%;
+    }
+    .hero h1 {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      margin-bottom: 18px;
+    }
+    .hero h1 .accent { color: var(--orange); }
+    .hero-bio {
+      font-size: 16px; color: var(--text-muted);
+      max-width: 540px; line-height: 1.75;
+      margin-bottom: 28px;
+    }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 20px; border-radius: 8px;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+    }
+    .btn-primary {
+      background: var(--orange); color: #fff;
+    }
+    .btn-primary:hover { background: var(--orange-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(249,115,22,.35); }
+    .btn-ghost {
+      background: transparent; color: var(--text-muted);
+      border: 1.5px solid var(--border);
+    }
+    .btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+
+    .hero-meta {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      margin-top: 28px;
+    }
+    .hero-meta-item {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 13px; color: var(--text-muted);
+    }
+    .hero-meta-item svg { color: var(--blue); flex-shrink: 0; }
+
+    .hero-avatar {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--orange-light) 0%, var(--blue-light) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Sora', sans-serif;
+      font-size: 36px; font-weight: 700;
+      color: var(--orange);
+      border: 3px solid var(--surface);
+      box-shadow: var(--shadow-md);
+      flex-shrink: 0;
+    }
+
+    /* ── Section headings ── */
+    .section-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--orange);
+      margin-bottom: 8px;
+    }
+    .section-label::before {
+      content: ''; width: 20px; height: 2px; background: var(--orange); border-radius: 1px;
+    }
+    .section-title {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(22px, 3vw, 28px);
+      font-weight: 700; letter-spacing: -0.5px;
+      margin-bottom: 32px;
+    }
+
+    /* ── Experience timeline ── */
+    .timeline { display: flex; flex-direction: column; gap: 0; }
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 0 28px;
+      position: relative;
+    }
+    .timeline-item:not(:last-child) {
+      margin-bottom: 0;
+    }
+    .timeline-left {
+      padding-top: 4px;
+      text-align: right;
+      padding-right: 28px;
+      position: relative;
+    }
+    .timeline-left::after {
+      content: '';
+      position: absolute; right: -1px; top: 8px;
+      width: 2px; bottom: -8px;
+      background: var(--border);
+    }
+    .timeline-item:last-child .timeline-left::after { display: none; }
+    .timeline-dot {
+      position: absolute; right: -7px; top: 6px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--orange);
+      border: 3px solid var(--bg);
+      z-index: 1;
+    }
+    .timeline-period {
+      font-size: 12px; font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .timeline-duration {
+      font-size: 11px; color: var(--text-light);
+      margin-top: 3px;
+    }
+    .timeline-body {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow .2s;
+    }
+    .timeline-body:hover { box-shadow: var(--shadow-md); }
+    .timeline-company {
+      font-size: 11px; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--blue-dark);
+      margin-bottom: 4px;
+    }
+    .timeline-role {
+      font-size: 16px; font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .timeline-desc {
+      font-size: 14px; color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      font-size: 11px; font-weight: 600;
+      padding: 3px 10px; border-radius: 999px;
+    }
+    .tag-orange { background: var(--orange-light); color: var(--orange-dark); }
+    .tag-blue   { background: var(--blue-light);   color: var(--blue-dark); }
+    .tag-gray   { background: #F3F4F6; color: var(--text-muted); }
+
+    /* ── Skills ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .skill-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .skill-card-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; margin-bottom: 12px;
+    }
+    .skill-card-title {
+      font-size: 14px; font-weight: 600; margin-bottom: 6px;
+    }
+    .skill-card-items {
+      font-size: 13px; color: var(--text-muted); line-height: 1.65;
+    }
+
+    /* ── Education ── */
+    .edu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 16px;
+    }
+    .edu-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      box-shadow: var(--shadow-sm);
+      display: flex; gap: 16px; align-items: flex-start;
+    }
+    .edu-badge {
+      width: 44px; height: 44px; flex-shrink: 0;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--orange-light), var(--blue-light));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .edu-degree { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+    .edu-school { font-size: 13px; color: var(--blue-dark); font-weight: 500; margin-bottom: 3px; }
+    .edu-year   { font-size: 12px; color: var(--text-light); }
+
+    /* ── Contact ── */
+    .contact-bar {
+      background: linear-gradient(135deg, var(--orange) 0%, #FB923C 50%, var(--blue) 100%);
+      border-radius: var(--radius);
+      padding: 40px 36px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+      color: #fff;
+    }
+    .contact-bar h2 {
+      font-family: 'Sora', sans-serif;
+      font-size: 22px; font-weight: 700; margin-bottom: 6px;
+    }
+    .contact-bar p { font-size: 14px; opacity: .85; }
+    .btn-white {
+      background: #fff; color: var(--orange);
+      padding: 11px 24px; border-radius: 8px;
+      font-size: 14px; font-weight: 700;
+      transition: all .2s; white-space: nowrap;
+    }
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.15); }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center; padding: 32px 24px;
+      font-size: 13px; color: var(--text-light);
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-avatar { display: none; }
+      .timeline-item { grid-template-columns: 1fr; }
+      .timeline-left {
+        text-align: left; padding-right: 0; padding-left: 18px;
+        margin-bottom: 6px;
+      }
+      .timeline-left::after { display: none; }
+      .timeline-dot { left: 0; right: auto; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav>
+  <div class="inner">
+    <span class="nav-logo">Luca <span>Vegro</span></span>
+    <div class="nav-links">
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ── -->
+<div class="container">
+  <div class="hero">
+    <div>
+      <div class="hero-eyebrow">Available for opportunities</div>
+      <h1>Luca <span class="accent">Vegro</span></h1>
+      <p class="hero-bio">
+        Finance & risk professional with 9+ years at UniCredit SpA.
+        I bridge quantitative modelling and business strategy — from Pillar 1 model validation and
+        big-data profitability analytics to Pillar 2 capital frameworks and risk integration.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Get in touch
+        </a>
+        <a href="#experience" class="btn btn-ghost">View experience</a>
       </div>
-
-      <a href="{{ site.baseurl }}{{ post.url }}" class="read-more">Read More</a>
-    </article>
-  {% endfor %}
+      <div class="hero-meta">
+        <span class="hero-meta-item">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          Milan, Italy
+        </span>
+        <span class="hero-meta-item">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8L2 7h20z"/></svg>
+          UniCredit SpA
+        </span>
+        <span class="hero-meta-item">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          Risk Management · Finance
+        </span>
+      </div>
+    </div>
+    <div class="hero-avatar">LV</div>
+  </div>
 </div>
+
+<!-- ── Experience ── -->
+<div class="container section" id="experience">
+  <div class="section-label">Career</div>
+  <h2 class="section-title">Professional Experience</h2>
+
+  <div class="timeline">
+
+    <!-- Role 1 -->
+    <div class="timeline-item">
+      <div class="timeline-left">
+        <div class="timeline-dot"></div>
+        <div class="timeline-period">2024 – Present</div>
+        <div class="timeline-duration">~2 years</div>
+      </div>
+      <div>
+        <div class="timeline-body">
+          <div class="timeline-company">UniCredit SpA · Group Risk Management</div>
+          <div class="timeline-role">Senior Risk Modeler — Pillar 2 & Risk Integration</div>
+          <p class="timeline-desc">
+            Design and maintain ICAAP capital models covering interest rate risk in the banking book
+            (IRRBB), concentration risk, and pension risk. Drive the risk integration framework,
+            ensuring coherent aggregation of Pillar 2 capital add-ons under internal stress scenarios.
+            Collaborate with regulators (ECB SREP) and provide modelling support for strategic capital planning.
+          </p>
+          <div class="tags">
+            <span class="tag tag-orange">ICAAP</span>
+            <span class="tag tag-orange">IRRBB</span>
+            <span class="tag tag-orange">Pillar 2</span>
+            <span class="tag tag-blue">Stress Testing</span>
+            <span class="tag tag-blue">Risk Integration</span>
+            <span class="tag tag-gray">Python</span>
+            <span class="tag tag-gray">ECB SREP</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Role 2 -->
+    <div class="timeline-item">
+      <div class="timeline-left">
+        <div class="timeline-dot" style="background:var(--blue)"></div>
+        <div class="timeline-period">2022 – 2024</div>
+        <div class="timeline-duration">2 years</div>
+      </div>
+      <div>
+        <div class="timeline-body">
+          <div class="timeline-company">UniCredit SpA · Italy CFO</div>
+          <div class="timeline-role">Profitability Analyst — Retail & Commercial Finance</div>
+          <p class="timeline-desc">
+            Embedded with the Italy CFO office to lead big-data analytics for retail and commercial
+            banking initiatives. Acted as a business-technical liaison between front-office teams and
+            central data engineering, translating commercial questions into analytical pipelines on
+            Palantir Foundry. Owned P&amp;L attribution models, product profitability scorecards, and
+            the data-quality governance framework for management reporting.
+          </p>
+          <div class="tags">
+            <span class="tag tag-blue">Palantir Foundry</span>
+            <span class="tag tag-blue">Big Data Analytics</span>
+            <span class="tag tag-blue">P&amp;L Attribution</span>
+            <span class="tag tag-orange">Data Quality</span>
+            <span class="tag tag-gray">SQL</span>
+            <span class="tag tag-gray">Python</span>
+            <span class="tag tag-gray">Product Profitability</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Role 3 -->
+    <div class="timeline-item">
+      <div class="timeline-left">
+        <div class="timeline-dot" style="background:var(--text-muted)"></div>
+        <div class="timeline-period">2017 – 2022</div>
+        <div class="timeline-duration">5 years</div>
+      </div>
+      <div>
+        <div class="timeline-body">
+          <div class="timeline-company">UniCredit SpA · Group Internal Validation</div>
+          <div class="timeline-role">Model Validator — Pillar 1 Capital Models</div>
+          <p class="timeline-desc">
+            Independent validation of IRB credit risk models (PD, LGD, EAD) and market risk models
+            across the Group. Specialised focus on IT infrastructure compliance assessments and data
+            quality reviews underpinning regulatory capital calculations. Produced validation reports
+            submitted to the ECB and internal governance boards, and recommended model adjustments
+            that resulted in material capital savings.
+          </p>
+          <div class="tags">
+            <span class="tag tag-orange">IRB Models</span>
+            <span class="tag tag-orange">Pillar 1</span>
+            <span class="tag tag-orange">Model Validation</span>
+            <span class="tag tag-blue">IT Compliance</span>
+            <span class="tag tag-blue">Data Quality</span>
+            <span class="tag tag-gray">SAS</span>
+            <span class="tag tag-gray">R</span>
+            <span class="tag tag-gray">Basel III</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Skills ── -->
+<div class="container section" id="skills">
+  <div class="section-label">Expertise</div>
+  <h2 class="section-title">Skills & Tools</h2>
+  <div class="skills-grid">
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:var(--orange-light)">📐</div>
+      <div class="skill-card-title">Quantitative Modelling</div>
+      <div class="skill-card-items">IRB credit models · IRRBB · Concentration risk · ICAAP capital estimation · Stress testing · Scenario analysis</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:var(--blue-light)">📊</div>
+      <div class="skill-card-title">Data & Analytics</div>
+      <div class="skill-card-items">Palantir Foundry · Python (pandas, numpy, sklearn) · SQL · SAS · R · Data quality governance · Pipeline design</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:var(--orange-light)">🏛️</div>
+      <div class="skill-card-title">Regulatory Frameworks</div>
+      <div class="skill-card-items">Basel III / CRR · ECB SREP · ICAAP / ILAAP · EBA guidelines · Model risk management · IT infrastructure compliance</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:var(--blue-light)">💼</div>
+      <div class="skill-card-title">Business Finance</div>
+      <div class="skill-card-items">P&amp;L attribution · Product profitability · Management reporting · Commercial analytics · Business-technical liaison</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:#F3F4F6)">🤝</div>
+      <div class="skill-card-title">Stakeholder & Governance</div>
+      <div class="skill-card-items">ECB interaction · Internal audit interface · Model governance boards · Cross-functional project leadership · Documentation</div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon" style="background:var(--blue-light)">🌐</div>
+      <div class="skill-card-title">Languages</div>
+      <div class="skill-card-items">Italian — native · English — professional fluency · French — working proficiency</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Education ── -->
+<div class="container section" id="education">
+  <div class="section-label">Academic Background</div>
+  <h2 class="section-title">Education</h2>
+  <div class="edu-grid">
+
+    <div class="edu-card">
+      <div class="edu-badge">🎓</div>
+      <div>
+        <div class="edu-degree">MSc in Finance</div>
+        <div class="edu-school">Bocconi University, Milan</div>
+        <div class="edu-year">2015 – 2017 · Thesis: Credit risk model validation under Basel III</div>
+      </div>
+    </div>
+
+    <div class="edu-card">
+      <div class="edu-badge">📖</div>
+      <div>
+        <div class="edu-degree">BSc in Economics & Management</div>
+        <div class="edu-school">University of Padua</div>
+        <div class="edu-year">2012 – 2015 · 110/110 cum laude</div>
+      </div>
+    </div>
+
+    <div class="edu-card">
+      <div class="edu-badge">📜</div>
+      <div>
+        <div class="edu-degree">Financial Risk Manager (FRM)</div>
+        <div class="edu-school">GARP — Global Association of Risk Professionals</div>
+        <div class="edu-year">Certified 2019</div>
+      </div>
+    </div>
+
+    <div class="edu-card">
+      <div class="edu-badge">🏅</div>
+      <div>
+        <div class="edu-degree">Certificate in Quantitative Finance (CQF)</div>
+        <div class="edu-school">Fitch Learning</div>
+        <div class="edu-year">Completed 2021</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Contact ── -->
+<div class="container section" id="contact">
+  <div class="contact-bar">
+    <div>
+      <h2>Let's connect</h2>
+      <p>Open to senior risk, quant finance, and data leadership roles.</p>
+    </div>
+    <a href="mailto:luca.vegro@example.com" class="btn-white">luca.vegro@example.com</a>
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+  <div class="container">
+    Luca Vegro · Milan, Italy · Built with GitHub Pages
+  </div>
+</footer>
+
+</body>
+</html>
